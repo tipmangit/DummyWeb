@@ -1,8 +1,8 @@
 FROM php:8.2-apache
 
-# Install SQLite extensions for our database
-RUN apt-get update && apt-get install -y libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite
+# Install PostgreSQL client dev packages and PHP drivers
+RUN apt-get update && apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
 
 # Enable Apache Mod_Rewrite
 RUN a2enmod rewrite
@@ -11,7 +11,7 @@ RUN a2enmod rewrite
 COPY . /var/www/html/
 
 # Create uploads directory and set appropriate permissions
-RUN mkdir -p /var/www/html/uploads /var/www/html/database \
-    && chmod -R 777 /var/www/html/uploads /var/www/html/database
+RUN mkdir -p /var/www/html/uploads \
+    && chmod -R 777 /var/www/html/uploads
 
 EXPOSE 80
